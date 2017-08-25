@@ -1,0 +1,14 @@
+{
+  "name": "Hull Shortener",
+  "description": "A Hull URL Shortener.",
+  "repository": "https://github.com/hull-ships/hull-shortener",
+  "website": "http://www.hull.io",
+  "success_url": "/readme",
+  "env": {
+    "SECRET" : {
+      "description" : "A Secret key",
+      "generator" : "secret"
+    }
+  },
+  "scripts": {}
+}

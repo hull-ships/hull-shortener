@@ -1,0 +1,15 @@
+node_modules
+bower_components
+
+stats.json
+.DS_Store
+npm-debug.log
+newrelic_agent.log
+.env*
+.idea
+
+dist
+lib
+
+# sensible fixture data
+specs/fixtures
