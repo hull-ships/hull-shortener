@@ -27,7 +27,7 @@ export default function Server(connector, options = {}) {
         .equals(req.hull.config.organization)
         .exec(function(err, urls) {
           console.log(urls);
-          res.render(path.join(__dirname, "views/index.ejs"), { urls });
+          res.render(path.join(__dirname, "../views/index.ejs"), { urls });
         });
     } else {
       return res.send("Unauthorized");
