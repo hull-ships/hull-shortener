@@ -21,7 +21,17 @@ export default function Server(connector, options = {}) {
   connector.setupApp(app);
 
   app.get("/admin.html", HullMiddleware, (req, res) => {
-    res.sendFile(path.join(__dirname, "views/index.html"));
+    if (req.hull && req.hull.token) {
+      Url
+        .where("organization")
+        .equals(req.hull.config.organization)
+        .exec(function(err, urls) {
+          console.log(urls);
+          res.render(path.join(__dirname, "views/index.ejs"), { urls });
+        });
+    } else {
+      return res.send("Unauthorized");
+    }
   });
 
   app.post("/api/shorten", (req, res, next) => {
@@ -41,7 +51,7 @@ export default function Server(connector, options = {}) {
         res.send({ shortUrl });
       } else {
         // since it doesn't exist, let's go ahead and create it:
-        const newUrl = Url({ long_url: longUrl, ship, /* secret, */ organization });
+        const newUrl = Url({ long_url: longUrl, short_url: shortUrl, ship, /* secret, */ organization });
         // save the new link
         newUrl.save(error => {
           if (error) { console.log(error); }

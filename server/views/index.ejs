@@ -21,15 +21,37 @@
                 </span>
               </div>
             </div>
-
             <div class="col-lg-12 mb-2 mt-1 link-container text-left">
               <h5 class="mb-0">Your redirect link:</h5>
-              <input class="form-control" disabled id="link"/>
+              <pre id="link"/>
             </div>
 
           </div>
       </div>
-    </panel>
+    </div>
+    <div class="panel">
+      <div class="panel-heading">Generated Links</div>
+      <div class="panel-body">
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>Short URL</th>
+            <th>Full URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (i in urls) { %>
+            <tr>
+              
+              <td><%= urls[i].short_url %></td>
+              <td><%= urls[i].long_url %></td>
+            </tr>
+          <% } %>
+        </tbody>    
+      </table>
+        
+      </div>
+    </div>
   </div>
 </body>
 </html>
