@@ -68,9 +68,9 @@ export default function Server(connector, options = {}) {
     const base58Id = req.params.encoded_id;
     const id = decode(base58Id);
     // check if url already exists in database
-    Url.findOne({ _id: id }, (err, doc) => {
+    Url.findOne({ _id: id }, (err, doc = {}) => {
       const { ship, /* secret, */ organization, long_url } = doc;
-      if (doc) {
+      if (doc && ship) {
         res.redirect(buildRedirect({ ship, organization, long_url, req, referrer: req.get("Referer") }));
       } else {
         res.redirect(req.hostname);
