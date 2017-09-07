@@ -2,10 +2,15 @@ import express from "express";
 import bodyParser from "body-parser";
 import devMode from "./dev-mode";
 import path from "path";
+import _ from "lodash";
 import mongoose from "mongoose";
 import buildRedirect from "./build_redirect.js";
 import { encode, decode } from "./base58.js";
 import Url from "./models/url";
+
+
+const buildShortUrl = ({ req, doc }) => `https://${req.hostname}/${encode(doc._id)}`;
+
 
 export default function Server(connector, options = {}) {
   mongoose.connect(options.mongodbUri, { useMongoClient: true });
@@ -27,7 +32,12 @@ export default function Server(connector, options = {}) {
         .equals(req.hull.config.organization)
         .exec(function getLinks(err, urls) {
           req.hull.client.logger.info("view links", { urls });
-          res.render(path.join(__dirname, "../views/index.ejs"), { urls });
+          res.render(path.join(__dirname, "../views/index.ejs"), {
+            urls: _.map(urls, doc => ({
+              long_url: doc.long_url,
+              short_url: buildShortUrl({ req, doc })
+            }))
+          });
         });
     } else {
       res.send("Unauthorized");
@@ -47,7 +57,7 @@ export default function Server(connector, options = {}) {
     // check if url already exists in database
     Url.findOne({ long_url: longUrl, ship }, (err, doc) => {
       if (doc) {
-        shortUrl = `https://${req.hostname}/${encode(doc._id)}`;
+        shortUrl = buildShortUrl({ req, doc });
         // the document exists, so we return it without creating a new entry
         res.send({ shortUrl });
       } else {

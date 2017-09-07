@@ -64,7 +64,7 @@
     "hull": "0.11.11",
     "jquery": "^3.2.1",
     "json-stable-stringify": "^1.0.1",
-    "lodash": "^4.13.1",
+    "lodash": "^4.17.4",
     "moment": "^2.13.0",
     "mongoose": "4.2.9",
     "newrelic": "^1.28.3",
