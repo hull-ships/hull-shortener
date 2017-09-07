@@ -87,10 +87,13 @@ export default function Server(connector, options = {}) {
           } else {
             res.redirect(req.hostname);
           }
+        } else {
+          res.send(req.hostname);
         }
       });
     } catch (e) {
       console.log(e);
+      res.send("Not Found");
     }
   });
 
