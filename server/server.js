@@ -25,16 +25,17 @@ export default function Server(connector, options = {}) {
       Url
         .where("organization")
         .equals(req.hull.config.organization)
-        .exec(function(err, urls) {
-          console.log(urls);
+        .exec(function getLinks(err, urls) {
+          req.hull.client.logger.info("view links", { urls });
           res.render(path.join(__dirname, "../views/index.ejs"), { urls });
         });
     } else {
-      return res.send("Unauthorized");
+      res.send("Unauthorized");
     }
   });
 
   app.post("/api/shorten", (req, res, next) => {
+    Hull.logger.info("generate link", { body: req.body });
     const { ship, organization, secret } = req.body;
     req.hull = { config: { ship, organization, secret } };
     next();
@@ -63,13 +64,14 @@ export default function Server(connector, options = {}) {
   });
 
   app.get("/:encoded_id", (req, res) => {
+    Hull.logger.info("follow link", { body: req.body });
     const base58Id = req.params.encoded_id;
     const id = decode(base58Id);
     // check if url already exists in database
     Url.findOne({ _id: id }, (err, doc) => {
       const { ship, /* secret, */ organization, long_url } = doc;
       if (doc) {
-        res.redirect(buildRedirect({ ship, organization, long_url, req }));
+        res.redirect(buildRedirect({ ship, organization, long_url, req, referrer: req.get("Referer") }));
       } else {
         res.redirect(req.hostname);
       }
