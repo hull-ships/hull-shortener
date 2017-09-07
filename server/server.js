@@ -74,18 +74,24 @@ export default function Server(connector, options = {}) {
   });
 
   app.get("/:encoded_id", (req, res) => {
-    Hull.logger.info("follow link", { body: req.body });
-    const base58Id = req.params.encoded_id;
-    const id = decode(base58Id);
-    // check if url already exists in database
-    Url.findOne({ _id: id }, (err, doc = {}) => {
-      const { ship, /* secret, */ organization, long_url } = doc;
-      if (doc && ship) {
-        res.redirect(buildRedirect({ ship, organization, long_url, req, referrer: req.get("Referer") }));
-      } else {
-        res.redirect(req.hostname);
-      }
-    });
+    try {
+      Hull.logger.info("follow link", { body: req.body });
+      const base58Id = req.params.encoded_id;
+      const id = decode(base58Id);
+      // check if url already exists in database
+      Url.findOne({ _id: id }, (err, doc = {}) => {
+        if (doc) {
+          const { ship, /* secret, */ organization, long_url } = doc;
+          if (ship && long_url && organization) {
+            res.redirect(buildRedirect({ ship, organization, long_url, req, referrer: req.get("Referer") }));
+          } else {
+            res.redirect(req.hostname);
+          }
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
   });
 
   // Error Handler
