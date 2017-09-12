@@ -8,7 +8,6 @@ import buildRedirect from "./build_redirect.js";
 import { encode, decode } from "./base58.js";
 import Url from "./models/url";
 
-
 const buildShortUrl = ({ req, doc }) => `https://${req.hostname}/${encode(doc._id)}`;
 
 
@@ -31,9 +30,9 @@ export default function Server(connector, options = {}) {
         .where("organization")
         .equals(req.hull.config.organization)
         .exec(function getLinks(err, urls) {
-          req.hull.client.logger.info("view links", { urls });
           res.render(path.join(__dirname, "../views/index.ejs"), {
             urls: _.map(urls, doc => ({
+              clicks: doc.clicks,
               long_url: doc.long_url,
               short_url: buildShortUrl({ req, doc })
             }))
@@ -75,25 +74,37 @@ export default function Server(connector, options = {}) {
 
   app.get("/:encoded_id", (req, res) => {
     try {
-      Hull.logger.info("follow link", { body: req.body });
+      const { body, url, query } = req;
+      const referrer = req.get("Referer");
       const base58Id = req.params.encoded_id;
       const id = decode(base58Id);
+
+      const logMessage = { body, url, id, referrer };
+      Hull.logger.info("incoming.user.start", { ...logMessage, message: "Follow link" });
+
       // check if url already exists in database
       Url.findOne({ _id: id }, (err, doc = {}) => {
         if (doc) {
+          // Increment click counter
+          Url.update({ _id: id }, { $inc: { clicks: 1 } }).exec();
+
           const { ship, /* secret, */ organization, long_url } = doc;
           if (ship && long_url && organization) {
-            res.redirect(buildRedirect({ ship, organization, long_url, req, referrer: req.get("Referer") }));
+            res.redirect(buildRedirect({ query, organization, long_url, referrer }));
+            Hull.logger.error("incoming.user.success", { ...logMessage, message: "Link Followed" });
           } else {
-            res.redirect(req.hostname);
+            // Invalid link
+            Hull.logger.error("incoming.user.error", { ...logMessage, doc, message: "Invalid link" });
+            res.send("Invalid Link");
           }
         } else {
-          res.send(req.hostname);
+          Hull.logger.error("incoming.user.error", { ...logMessage, doc, message: "Invalid link" });
+          res.send("Invalid Link");
         }
       });
     } catch (e) {
-      console.log(e);
-      res.send("Not Found");
+      Hull.logger.error("incoming.user.error", { error: e.message, message: "Invalid link" });
+      res.send("An error occurred, We've been notified");
     }
   });
 

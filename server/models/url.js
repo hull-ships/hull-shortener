@@ -12,7 +12,7 @@ const counter = mongoose.model("counter", CounterSchema);
 const urlSchema = new Schema({
   _id: { type: Number, index: true },
   long_url: String,
-  short_url: String,
+  clicks: { type: Number, default: 0 },
   ship: String,
   organization: String,
   created_at: Date
