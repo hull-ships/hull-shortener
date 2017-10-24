@@ -27,9 +27,9 @@ $(function boot() {
       async: false,
       data: JSON.stringify({ url: $("#url-field").val(), ship, organization, secret }),
       success(data) {
-        // window.location.reload();
-        $("#link").text(data.shortUrl);
-        $(".link-container").hide().fadeIn("slow");
+        window.location.reload();
+        // $("#link").text(data.shortUrl);
+        // $(".link-container").hide().fadeIn("slow");
       }
     });
   });

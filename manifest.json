@@ -1,13 +1,76 @@
 {
   "name": "Shortener",
   "description": "Shorten links and creates tracked redirects",
-  "tags": ["incoming", "outgoing", "batch", "oneColumn"],
   "picture": "picture.png",
-  "ui": false,
-  "admin": "admin.html",
-  "readme" : "readme.md",
   "version": "0.1.0",
+  "tags": [
+    "incoming",
+    "outgoing",
+    "batch",
+    "oneColumn"
+  ],
+  "settings": [
+    {
+      "name": "facebook_title",
+      "title": "Your Facebook Pixel",
+      "description": "Get your Facebook Pixel from the [Ads Manager](https://www.facebook.com/ads/manager/pixel/facebook_pixel) or [create one](https://www.facebook.com/business/help/952192354843755?helpref=faq_content#createpixel).",
+      "type": "string",
+      "format": "title"
+    },
+    {
+      "name": "facebook",
+      "title": "Facebook Pixel ID",
+      "type": "string",
+      "format": "string"
+    },
+    {
+      "name": "twitter_title",
+      "title": "Your Twitter Pixel",
+      "description": "See [how to create a Twitter pixel](https://business.twitter.com/fr/advertising/campaign-types/increase-website-traffic/how-to-setup-conversion-tracking.html)",
+      "type": "string",
+      "format": "title"
+    },
+    {
+      "name": "twitter",
+      "title": "Twitter Pixel ID",
+      "type": "string",
+      "format": "string"
+    },
+    {
+      "name": "google_title",
+      "title": "Your Google Pixel",
+      "description": "See [how to create a Google Pixel](https://adwords.google.com/cm/CampaignMgmt)",
+      "type": "string",
+      "format": "title"
+    },
+    {
+      "name": "google",
+      "title": "Google Pixel ID",
+      "type": "string",
+      "format": "string"
+    },
+    {
+      "name": "linkedin_title",
+      "title": "Your Linkedin Pixel",
+      "description": "See [how to create a Linkedin Pixel](https://www.linkedin.com/ad/accounts)",
+      "type": "string",
+      "format": "title"
+    },
+    {
+      "name": "linkedin",
+      "title": "Linkedin Pixel ID",
+      "type": "string",
+      "format": "string"
+    }
+  ],
   "private_settings": [],
   "resources": [],
-  "subscriptions" : [ { "url" : "/notify" } ]
+  "readme": "readme.md",
+  "admin": "admin.html",
+  "ui": false,
+  "subscriptions": [
+    {
+      "url": "/notify"
+    }
+  ]
 }

@@ -1,3 +1,4 @@
+import compression from "compression";
 import express from "express";
 import bodyParser from "body-parser";
 import devMode from "./dev-mode";
@@ -7,9 +8,10 @@ import mongoose from "mongoose";
 import buildRedirect from "./build_redirect.js";
 import { encode, decode } from "./base58.js";
 import Url from "./models/url";
+import updatePixels from "./lib/update-pixels";
+import notifHandler from "./lib/notify-handler";
 
 const buildShortUrl = ({ req, doc }) => `https://${req.hostname}/${encode(doc._id)}`;
-
 
 export default function Server(connector, options = {}) {
   mongoose.connect(options.mongodbUri, { useMongoClient: true });
@@ -17,6 +19,7 @@ export default function Server(connector, options = {}) {
   const app = express();
 
   app.use(bodyParser.json());
+  app.use(compression());
 
   const { Hull, hostSecret } = options;
 
@@ -26,18 +29,22 @@ export default function Server(connector, options = {}) {
 
   app.get("/admin.html", HullMiddleware, (req, res) => {
     if (req.hull && req.hull.token) {
-      Url
-        .where("organization")
-        .equals(req.hull.config.organization)
-        .exec(function getLinks(err, urls) {
-          res.render(path.join(__dirname, "../views/index.ejs"), {
-            urls: _.map(urls, doc => ({
-              clicks: doc.clicks,
-              long_url: doc.long_url,
-              short_url: buildShortUrl({ req, doc })
-            }))
-          });
-        });
+      const { client, ship, config } = req.hull;
+      Url.where("ship").equals(config.ship)
+      .exec(function getLinks(err, urls) {
+        if (ship) updatePixels({ client, ship, urls });
+        console.log(urls);
+        const u = _.map(urls, doc => ({
+          long_url: doc.long_url,
+          facebook: doc.facebook,
+          twitter: doc.twitter,
+          linkedin: doc.linkedin,
+          google: doc.google,
+          clicks: doc.clicks,
+          short_url: buildShortUrl({ req, doc })
+        }))
+        res.render(path.join(__dirname, "../views/index.ejs"), { urls: u });
+      });
     } else {
       res.send("Unauthorized");
     }
@@ -48,20 +55,25 @@ export default function Server(connector, options = {}) {
     const { ship, organization, secret } = req.body;
     req.hull = { config: { ship, organization, secret } };
     next();
-  }, HullMiddleware, (req, res) => {
+  },
+  HullMiddleware,
+  (req, res) => {
     const longUrl = req.body.url;
     let shortUrl = "";
-    const { ship, organization } = req.hull.config;
+    const { ship, config } = req.hull;
+    const { organization } = config;
+    const { settings } = ship;
 
     // check if url already exists in database
-    Url.findOne({ long_url: longUrl, ship }, (err, doc) => {
+    Url.findOne({ long_url: longUrl, ship: ship.id }, (err, doc) => {
       if (doc) {
         shortUrl = buildShortUrl({ req, doc });
         // the document exists, so we return it without creating a new entry
         res.send({ shortUrl });
       } else {
         // since it doesn't exist, let's go ahead and create it:
-        const newUrl = Url({ long_url: longUrl, short_url: shortUrl, ship, /* secret, */ organization });
+        const pixels = _.pick(settings, ["facebook", "linkedin", "google", "twitter"]);
+        const newUrl = Url({ long_url: longUrl, short_url: shortUrl, ship: ship.id, organization, ...pixels });
         // save the new link
         newUrl.save(error => {
           if (error) { console.log(error); }
@@ -88,10 +100,17 @@ export default function Server(connector, options = {}) {
           // Increment click counter
           Url.update({ _id: id }, { $inc: { clicks: 1 } }).exec();
 
-          const { ship, /* secret, */ organization, long_url } = doc;
+          const { ship, /* secret, */ organization, long_url, facebook, linkedin, google, twitter } = doc;
           if (ship && long_url && organization) {
-            res.redirect(buildRedirect({ query, organization, long_url, referrer }));
-            Hull.logger.error("incoming.user.success", { ...logMessage, message: "Link Followed" });
+            Hull.logger.info("incoming.user.success", { ...logMessage, message: "Link Followed" });
+            // res.redirect(buildRedirect({ query, organization, long_url, referrer }));
+            res.render(path.join(__dirname, "../views/r.ejs"), {
+              facebook,
+              linkedin,
+              google,
+              twitter,
+              destination: buildRedirect({ query, organization, long_url, referrer })
+            });
           } else {
             // Invalid link
             Hull.logger.error("incoming.user.error", { ...logMessage, doc, message: "Invalid link" });
@@ -108,18 +127,19 @@ export default function Server(connector, options = {}) {
     }
   });
 
+  app.get("/notify", notifHandler);
+
   // Error Handler
   app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
     if (err) {
       const data = {
         status: err.status,
-        segmentBody: req.segment,
         method: req.method,
         headers: req.headers,
         url: req.url,
         params: req.params
       };
-      Hull.logger.error("Error ----------------", err.message, err.status, data);
+      Hull.logger.error("Error", err.message, err.status, data);
       return res.status(err.status || 500).send({ message: err.message });
     }
     return res.status(err.status || 500).send({ message: "undefined error" });

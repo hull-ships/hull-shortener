@@ -1,0 +1,8 @@
+[include]
+
+[ignore]
+
+[libs]
+<PROJECT-ROOT>/flow-typed/.*
+
+[options]

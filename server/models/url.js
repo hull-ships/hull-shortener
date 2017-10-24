@@ -15,6 +15,10 @@ const urlSchema = new Schema({
   clicks: { type: Number, default: 0 },
   ship: String,
   organization: String,
+  facebook: String,
+  google: String,
+  linkedin: String,
+  twitter: String,
   created_at: Date
 });
 

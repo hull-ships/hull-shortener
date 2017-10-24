@@ -1,7 +1,8 @@
 <html>
 <head>
-  <title>Computed traits Ship</title>
+  <title>Shortener</title>
   <link rel="stylesheet" href="//dd04rofzygnm0.cloudfront.net/releases/master/865f04865d2448286626bac92c518a8f8ea8bafe/stylesheets/neue.css" />
+  <link rel="stylesheet" href="/fontawesome/css/font-awesome.css" />
   <script src="/admin.js"></script>
 </head>
 <body class='container'>
@@ -38,22 +39,48 @@
             <th>Short URL</th>
             <th>Full URL</th>
             <th>Clicks</th>
+            <th>Retargeting Links</th>
           </tr>
         </thead>
         <tbody>
           <% for (i in urls) { %>
             <tr>
-              
               <td><%= urls[i].short_url %></td>
               <td><%= urls[i].long_url %></td>
               <td><%= urls[i].clicks %></td>
+              <td>
+                <% if(urls[i].facebook) { %>
+                  <div>
+                    <span style="display:inline-block; width: 20px;"><i class="fa fa-facebook"></i></span>
+                    <small class='text-muted'><%=urls[i].facebook%></small>
+                  </div>
+                <% } %>
+                <% if(urls[i].google) { %>
+                  <div>
+                    <span style="display:inline-block; width: 20px;"><i class="fa fa-google"></i></span>
+                    <small class='text-muted'><%=urls[i].google%></small>
+                  </div>
+                <% } %>
+                <% if(urls[i].twitter) { %>
+                  <div>
+                    <span style="display:inline-block; width: 20px;"><i class="fa fa-twitter"></i></span>
+                    <small class='text-muted'><%=urls[i].twitter%></small>
+                  </div>
+                <% } %>
+                <% if(urls[i].linkedin) { %>
+                  <div>
+                    <span style="display:inline-block; width: 20px;"><i class="fa fa-linkedin"></i></span>
+                    <small class='text-muted'><%=urls[i].linkedin%></small>
+                  </div>
+                <% } %>
+              </td>
             </tr>
           <% } %>
         </tbody>
       </table>
       <p>
         To see who clicked on links: Go to the Users tab, click "Add Event filter" and pick "Redirect Link Clicked" > "At least Once"
-      </p>    
+      </p>
       </div>
     </div>
   </div>

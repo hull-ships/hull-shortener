@@ -1,21 +1,57 @@
 {
   "parser": "babel-eslint",
-  "globals": {},
+  "globals": {
+    "Hull": true
+  },
+  "settings": {
+    "ecmascript": 6,
+    "jsx": true,
+    "import/extensions": [".js", ".jsx"],
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    }
+  },
+  "extends": [
+    "prettier",
+    "plugin:flowtype/recommended",
+    "airbnb"
+  ],
+  "plugins": [
+    "prettier",
+    "flowtype-errors",
+    "flowtype",
+    "react"
+  ],
   "env": {
+    "jest/globals": true,
+    "node": true,
+    "browser": true,
+    "commonjs": true,
+    "worker": true,
+    "mocha": true,
+    "mongo": true,
     "es6": true
   },
   "rules": {
-    "comma-dangle": [0],
+    "prettier/prettier": ["error", { "singleQuote": true }],
+    "flowtype-errors/show-errors": [2],
+    "comma-dangle": ["error", "never"],
     "max-len": [0],
-    "camelcase": [0],
-    "quotes": [2, "double"],
-    "prefer-arrow-callback": [0],
+    "camelcase": [1],
+    "arrow-parens": [0],
+    "quotes": [0],
+    "prefer-arrow-callback": [1],
     "new-cap": [0],
     "no-underscore-dangle": [0],
-    "arrow-body-style" : [0],
-    "no-param-reassign" : [0],
-    "no-console": [0],
-    "eqeqeq": [1]
-  },
-  "extends": "airbnb-base"
+    "arrow-body-style": [0],
+    "no-param-reassign": [0],
+    "no-console": [1],
+    "eqeqeq": [1],
+    "react/jsx-wrap-multilines": [0],
+    "react/no-deprecated": [2],
+    "react/jsx-uses-vars": [2],
+    "react/prefer-es6-class": [2],
+    "react/no-multi-comp": [2],
+    "react/no-find-dom-node": [2]
+  }
 }

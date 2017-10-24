@@ -11,7 +11,7 @@ if (process.env.LOG_LEVEL) {
   Hull.logger.transports.console.level = process.env.LOG_LEVEL;
 }
 
-Hull.logger.debug("processor.boot");
+Hull.logger.debug("hull-shortener.boot");
 
 const options = {
   hostSecret: process.env.SECRET || "1234",
@@ -28,4 +28,4 @@ const connector = new Hull.Connector(options);
 const app = server(connector, options);
 connector.startApp(app);
 
-Hull.logger.debug("processor.started", { port: options.port });
+Hull.logger.debug("hull-shortener.started", { port: options.port });
