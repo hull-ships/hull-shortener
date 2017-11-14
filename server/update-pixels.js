@@ -11,7 +11,6 @@ const update = ({ client, settings, urls }) => {
 
 const updatePixels = ({ client, ship, urls }) => {
   // Update pixels for all the links
-  console.log("Updating Pixel", urls, ship.id)
   const settings = _.omit(ship.settings, "_id");
   if (!urls || _.size(urls)) {
     return Url

@@ -8,7 +8,6 @@ const handler = smartNotifierHandler({
       ship,
       client
     }) => {
-      console.log("Ship Settings Updated-----------------------------")
       updatePixels({ ship, client });
       return Promise.resolve({});
     }
