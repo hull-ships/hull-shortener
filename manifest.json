@@ -4,6 +4,7 @@
   "picture": "picture.png",
   "version": "0.1.0",
   "tags": [
+    "smart-notifier",
     "incoming",
     "outgoing",
     "batch",
@@ -70,7 +71,7 @@
   "ui": false,
   "subscriptions": [
     {
-      "url": "/notify"
+      "url": "/smart-notifier"
     }
   ]
 }

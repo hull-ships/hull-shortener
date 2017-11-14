@@ -1,10 +1,14 @@
 import Promise from "bluebird";
 import updatePixels from "./update-pixels";
-import { notifHandler } from "hull/lib/utils";
+import { smartNotifierHandler } from "hull/lib/utils";
 
-const handler = notifHandler({
+const handler = smartNotifierHandler({
   handlers: {
-    "ship:update": ({ ship, client }) => {
+    "ship:update": ({
+      ship,
+      client
+    }) => {
+      console.log("Ships ")
       updatePixels({ ship, client });
     }
   }
