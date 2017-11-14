@@ -1,15 +1,20 @@
 # URL Shortener
 
-Imagine being able to retarget anybody who clicks on your links and having their profiles linked to your customer profiles and the visitors of your website.
-The Hull Shortener lets you serve specific ads on Facebook, Twitter, LinkedIn & Adwords to those audiences. 
+Imagine being able to retarget anybody who clicks on your links, and having their profiles linked to your customer profiles and the visitors of your website.
+
+The Hull Shortener lets you do this and serve specific ads on Facebook, Twitter, LinkedIn & Adwords to those audiences.
+
+## Features
 
 - Serve specific ads on Facebook, Twitter, LinkedIn & Google to everyone who clicked on a link.
-
 - Create short urls that redirect to your content, tracking clicks in the User's profiles, whitelist 3rd party cookies for your tracking domain and lets you retarget customers on Facebook, Twitter, Linkedin and Google.
 
-1. Create Short link.
-2. Share link on Social media and in emails
+## Usage
+
+1. Enter a link to be shortened. and click "Shorten". This will generate a link looking like `https://shr.it/xxx`. Optionally add UTM tags to the link
+2. Share short link on Social media and in emails.
 3. Retarget on Ad Platforms and add to their Customer Journey log.
+4. View in your Dashboard every user who clicked on the link by searching for the "Redirect Link Clicked" event
 
 ![Retargeting Screen](./screen.png)
 
