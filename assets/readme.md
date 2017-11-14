@@ -18,6 +18,16 @@ The Hull Shortener lets you serve specific ads on Facebook, Twitter, LinkedIn & 
 - A `Redirect Link Clicked` event will be added to their user profile
 - They will be added to a custom audience on Facebook, Twitter, Linkedin and Google so you can retarget them.
 
-## Shared Link Retargeting
+## How do I setup my Pixels ?
 
 To set it up, it's easy. Just enter your Pixel IDs for each of those networks in the Settings tab and generate some short links. Now anyone who clicks those links can be retargeted in Facebook, LinkedIn, Twitter and Google. Easy!
+
+## How do I create a custom audience ?
+
+Very easy:
+- On Facebook, go to your Facebook Ads Manager, then click "Create Audience"
+- Filter the audience, Select "URL" > "Contains" > "shr.it". You can be more precise by filtering to the exact link you shared if needed.
+- Click "Create Audience"
+
+Done. Your audience is live and will stay updated!
+You can now retarget them as needed.
