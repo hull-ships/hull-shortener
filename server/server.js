@@ -126,7 +126,7 @@ export default function Server(connector, options = {}) {
     }
   });
 
-  app.get("/smart-notifier", notifHandler);
+  app.post("/smart-notifier", notifHandler);
 
   // Error Handler
   app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
