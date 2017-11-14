@@ -8,8 +8,8 @@ import mongoose from "mongoose";
 import buildRedirect from "./build_redirect.js";
 import { encode, decode } from "./base58.js";
 import Url from "./models/url";
-import updatePixels from "./lib/update-pixels";
-import notifHandler from "./lib/notify-handler";
+import updatePixels from "./update-pixels";
+import notifHandler from "./notify-handler";
 
 const buildShortUrl = ({ req, doc }) => `https://${req.hostname}/${encode(doc._id)}`;
 
