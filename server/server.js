@@ -33,7 +33,6 @@ export default function Server(connector, options = {}) {
       Url.where("ship").equals(config.ship)
       .exec(function getLinks(err, urls) {
         if (ship) updatePixels({ client, ship, urls });
-        console.log(urls);
         const u = _.map(urls, doc => ({
           long_url: doc.long_url,
           facebook: doc.facebook,
