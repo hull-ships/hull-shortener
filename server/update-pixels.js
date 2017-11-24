@@ -2,6 +2,7 @@ import _ from "lodash";
 import Url from "./models/url";
 
 const update = ({ client, settings, urls }) => {
+  if(!client) { return Promise.reject("Can't find Client") }
   client.logger.info("shortener.links.startUpdate", { urls, settings })
   return Promise.all(_.map(urls, (url) => {
     client.logger.info("shortener.links.update", { id: url.id, ...settings });
