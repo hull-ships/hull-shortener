@@ -21,7 +21,7 @@ const updatePixels = ({ client, ship, urls }) => {
         return update({ client, settings, urls: u });
       });
   }
-  return update({ settings, urls });
+  return update({ client, settings, urls });
 };
 
 export default updatePixels;
