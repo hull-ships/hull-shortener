@@ -2,6 +2,8 @@
   "name": "Shortener",
   "description": "A Simple URL shortener that tracks clicks and allows you to retarget those audiences on social networks",
   "picture": "picture.png",
+  "source": "shortener",
+  "logo": "logo.png",
   "version": "0.1.0",
   "tags": [
     "smart-notifier",
