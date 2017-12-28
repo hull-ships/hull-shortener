@@ -18,7 +18,6 @@ export default function Server(connector, options = {}) {
 
   const app = express();
 
-  app.use(bodyParser.json());
   app.use(compression());
 
   const { Hull, hostSecret } = options;
@@ -26,6 +25,10 @@ export default function Server(connector, options = {}) {
   const HullMiddleware = connector.clientMiddleware({ hostSecret, fetchShip: true, cacheShip: false });
   if (options.devMode) app.use(devMode());
   connector.setupApp(app);
+  app.post("/smart-notifier", notifHandler);
+
+
+  app.use(bodyParser.json());
 
   app.get("/admin.html", HullMiddleware, (req, res) => {
     if (req.hull && req.hull.token) {
@@ -125,8 +128,6 @@ export default function Server(connector, options = {}) {
       res.send("An error occurred, We've been notified");
     }
   });
-
-  app.post("/smart-notifier", notifHandler);
 
   // Error Handler
   app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
