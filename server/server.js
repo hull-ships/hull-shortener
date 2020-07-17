@@ -111,7 +111,7 @@ export default function Server(connector, options = {}) {
                 linkedin,
                 google,
                 twitter,
-                destination: buildRedirect({ query, organization, long_url, referrer })
+                destination: buildRedirect({ ship, query, organization, long_url, referrer })
               });
             } else {
               // Invalid link
