@@ -18,7 +18,6 @@ export default function Server(connector, options = {}) {
 
   const app = express();
 
-  app.use(bodyParser.json());
   app.use(compression());
 
   const { Hull, hostSecret } = options;
@@ -26,6 +25,10 @@ export default function Server(connector, options = {}) {
   const HullMiddleware = connector.clientMiddleware({ hostSecret, fetchShip: true, cacheShip: false });
   if (options.devMode) app.use(devMode());
   connector.setupApp(app);
+  app.post("/smart-notifier", notifHandler);
+
+
+  app.use(bodyParser.json());
 
   app.get("/admin.html", HullMiddleware, (req, res) => {
     if (req.hull && req.hull.token) {
@@ -33,7 +36,6 @@ export default function Server(connector, options = {}) {
       Url.where("ship").equals(config.ship)
       .exec(function getLinks(err, urls) {
         if (ship) updatePixels({ client, ship, urls });
-        console.log(urls);
         const u = _.map(urls, doc => ({
           long_url: doc.long_url,
           facebook: doc.facebook,
@@ -93,28 +95,30 @@ export default function Server(connector, options = {}) {
 
       const logMessage = { body, url, id, referrer };
       Hull.logger.info("incoming.user.start", { ...logMessage, message: "Follow link" });
-
       // check if url already exists in database
       Url.findOne({ _id: id }, (err, doc = {}) => {
         if (doc) {
           // Increment click counter
-          Url.update({ _id: id }, { $inc: { clicks: 1 } }).exec();
-
-          const { ship, /* secret, */ organization, long_url, facebook, linkedin, google, twitter } = doc;
-          if (ship && long_url && organization) {
-            Hull.logger.info("incoming.user.success", { ...logMessage, message: "Link Followed" });
-            // res.redirect(buildRedirect({ query, organization, long_url, referrer }));
-            res.render(path.join(__dirname, "../views/r.ejs"), {
-              facebook,
-              linkedin,
-              google,
-              twitter,
-              destination: buildRedirect({ ship, query, organization, long_url, referrer })
-            });
-          } else {
-            // Invalid link
-            Hull.logger.error("incoming.user.error", { ...logMessage, doc, message: "Invalid link" });
-            res.send("Invalid Link");
+          try {
+            Url.update({ _id: id }, { $inc: { clicks: 1 } }).exec();
+            const { ship, /* secret, */ organization, long_url, facebook, linkedin, google, twitter } = doc;
+            if (ship && long_url && organization) {
+              Hull.logger.info("incoming.user.success", { ...logMessage, message: "Link Followed" });
+              // res.redirect(buildRedirect({ query, organization, long_url, referrer }));
+              res.render(path.join(__dirname, "../views/r.ejs"), {
+                facebook,
+                linkedin,
+                google,
+                twitter,
+                destination: buildRedirect({ ship, query, organization, long_url, referrer })
+              });
+            } else {
+              // Invalid link
+              Hull.logger.error("incoming.user.error", { ...logMessage, doc, message: "Invalid link" });
+              res.send("Invalid Link");
+            }
+          } catch(e) {
+            Hull.logger.error("incoming.user.error", { error: e.message, message: "error updating counter" });
           }
         } else {
           Hull.logger.error("incoming.user.error", { ...logMessage, doc, message: "Invalid link" });
@@ -126,8 +130,6 @@ export default function Server(connector, options = {}) {
       res.send("An error occurred, We've been notified");
     }
   });
-
-  app.get("/notify", notifHandler);
 
   // Error Handler
   app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
