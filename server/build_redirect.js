@@ -1,20 +1,13 @@
 import { extract, parse, stringify } from "query-string";
 
-const redirect = ({ ship, organization, long_url, query = {}, referrer = "" }) => {
-  const [namespace, domain, tld] = organization.split(".");
+const redirect = ({ organization, long_url, query = {}, referrer = "" }) => {
   const dest_qs = stringify({ ...parse(extract(long_url)), ...query });
   const url = dest_qs ? `${long_url.split("?").shift()}?${dest_qs}` : long_url;
   const qs = {
     ...query
   };
   if (referrer) qs.referrer = referrer;
-
-  const websiteQs = {
-    url: `${url}?${stringify(qs)}`,
-    "hull-app-id": ship
-  }
-
-  return `https://${namespace}.web.${domain}.${tld}/api/v1/r?${stringify(websiteQs)}`;
+  return `${url}?${stringify(qs)}`;
 };
 
 export default redirect;
