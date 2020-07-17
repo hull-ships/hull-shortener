@@ -1,16 +1,22 @@
 # URL Shortener
 
-Imagine being able to retarget anybody who clicks on your links and having their profiles linked to your customer profiles and the visitors of your website.
-The Hull Shortener lets you serve specific ads on Facebook, Twitter, LinkedIn & Adwords to those audiences. 
+Imagine being able to retarget anybody who clicks on your links, and having their profiles linked to your customer profiles and the visitors of your website.
+
+The Hull Shortener lets you do this and serve specific ads on Facebook, Twitter, LinkedIn & Adwords to those audiences.
+
+## Features
 
 - Serve specific ads on Facebook, Twitter, LinkedIn & Google to everyone who clicked on a link.
-
 - Create short urls that redirect to your content, tracking clicks in the User's profiles, whitelist 3rd party cookies for your tracking domain and lets you retarget customers on Facebook, Twitter, Linkedin and Google.
 
+## Usage
 
-1. Create Short link.
-2. Share link on Social media and in emails
+1. Enter a link to be shortened. and click "Shorten". This will generate a link looking like `https://shr.it/xxx`. Optionally add UTM tags to the link
+2. Share short link on Social media and in emails.
 3. Retarget on Ad Platforms and add to their Customer Journey log.
+4. View in your Dashboard every user who clicked on the link by searching for the "Redirect Link Clicked" event
+
+![Retargeting Screen](./screen.png)
 
 ## What happens when a user clicks one of your links:
 
@@ -18,6 +24,17 @@ The Hull Shortener lets you serve specific ads on Facebook, Twitter, LinkedIn & 
 - A `Redirect Link Clicked` event will be added to their user profile
 - They will be added to a custom audience on Facebook, Twitter, Linkedin and Google so you can retarget them.
 
-## Shared Link Retargeting
+## How do I setup my Pixels ?
 
-To set it up, it's easy. Just enter your Pixel IDs for each of those networks in the Settings tab and generate some short links. Now anyone who clicks those links can be retargeted in Facebook, LinkedIn, Twitter and Google. Easy!
+Easy. Go to the Settings tab, just enter your Pixel IDs for each of the networks and generate some short links. Now anyone who clicks those links can be retargeted in Facebook, LinkedIn, Twitter and Google. Easy!
+
+## How do I create a custom audience ?
+
+Easy too!
+
+- On Facebook, go to your Facebook Ads Manager, then click "Create Audience"
+- Filter the audience like this: "URL" > "Contains" > "shr.it". You can be more precise by filtering to the exact link you shared if needed.
+- Click "Create Audience"
+
+Done. Your audience is live and will stay updated!
+You can now retarget them as needed.
