@@ -101,7 +101,6 @@ export default function Server(connector, options = {}) {
           // Increment click counter
           try {
             Url.update({ _id: id }, { $inc: { clicks: 1 } }).exec();
-
             const { ship, /* secret, */ organization, long_url, facebook, linkedin, google, twitter } = doc;
             if (ship && long_url && organization) {
               Hull.logger.info("incoming.user.success", { ...logMessage, message: "Link Followed" });
