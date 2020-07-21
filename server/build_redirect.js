@@ -1,16 +1,18 @@
 import { extract, parse, stringify } from "query-string";
 
+const _ = require("lodash");
+
 const redirect = ({ ship, organization, long_url, query = {}, referrer = "" }) => {
   const [namespace, domain, tld] = organization.split(".");
+  if (!_.isEmpty(referrer) && _.isEmpty(query.referrer)) {
+    query.referrer = referrer;
+  }
+
   const dest_qs = stringify({ ...parse(extract(long_url)), ...query });
   const url = dest_qs ? `${long_url.split("?").shift()}?${dest_qs}` : long_url;
-  const qs = {
-    ...query
-  };
-  if (referrer) qs.referrer = referrer;
 
   const websiteQs = {
-    url: `${url}?${stringify(qs)}`,
+    url,
     "hull-app-id": ship
   }
 
