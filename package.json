@@ -81,7 +81,7 @@
     "superagent": "^2.0.0",
     "svg-inline-loader": "^0.6.0",
     "svg-inline-react": "^1.0.1",
-    "urijs": "^1.18.1",
+    "urijs": "^1.19.4",
     "webpack": "^1.13.1",
     "webpack-dev-middleware": "^1.6.1",
     "winston-logstash": "^0.2.11"
