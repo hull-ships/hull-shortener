@@ -73,7 +73,12 @@
   "ui": false,
   "subscriptions": [
     {
-      "url": "/smart-notifier"
+      "url": "/smart-notifier",
+      "conditions": {
+        "channels": {
+          "only": ["ship:update"]
+        }
+      }
     }
   ]
 }
