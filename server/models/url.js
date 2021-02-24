@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const CounterSchema = Schema({
   _id: { type: String, required: true },
@@ -24,12 +25,16 @@ const urlSchema = new Schema({
 
 urlSchema.pre("save", function urlPreSave(next) {
   const doc = this;
-  counter.findByIdAndUpdate({ _id: "url_count" }, { $inc: { seq: 1 } }, (error, c) => {
-    if (error) return next(error);
-    doc.created_at = new Date();
-    doc._id = c.seq;
-    return next();
-  });
+  counter.findByIdAndUpdate(
+    { _id: "url_count" },
+    { $inc: { seq: 1 } },
+    (error, c) => {
+      if (error) return next(error);
+      doc.created_at = new Date();
+      doc._id = c.seq;
+      return next();
+    }
+  );
 });
 
 const Url = mongoose.model("Url", urlSchema);

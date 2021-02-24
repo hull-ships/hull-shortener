@@ -23,7 +23,6 @@
     "react"
   ],
   "env": {
-    "jest/globals": true,
     "node": true,
     "browser": true,
     "commonjs": true,
@@ -33,7 +32,7 @@
     "es6": true
   },
   "rules": {
-    "prettier/prettier": ["error", { "singleQuote": true }],
+    "prettier/prettier": ["error", { "trailingComma":"none", "singleQuote": false }],
     "flowtype-errors/show-errors": [2],
     "comma-dangle": ["error", "never"],
     "max-len": [0],

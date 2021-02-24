@@ -3,7 +3,10 @@ import Hull from "hull";
 import server from "./server";
 
 if (process.env.NEW_RELIC_LICENSE_KEY) {
-  console.warn("Starting newrelic agent with key: ", process.env.NEW_RELIC_LICENSE_KEY);
+  console.warn(
+    "Starting newrelic agent with key: ",
+    process.env.NEW_RELIC_LICENSE_KEY
+  );
   require("newrelic"); // eslint-disable-line global-require
 }
 
