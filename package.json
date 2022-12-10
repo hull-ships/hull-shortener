@@ -60,7 +60,7 @@
     "deepmerge": "^1.5.2",
     "ejs-lint": "git+https://github.com/RyanZim/EJS-Lint.git",
     "event-stream": "^3.3.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "hull": "^0.13.23",
     "jquery": "^3.5.1",
     "json-stable-stringify": "^1.0.1",
